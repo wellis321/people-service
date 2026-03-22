@@ -367,6 +367,13 @@ $isAdmin     = $isLoggedIn && (RBAC::isOrganisationAdmin() || RBAC::isSuperAdmin
             <i class="fa-solid fa-users"></i>
             <span>People</span>
         </a>
+        <?php if (RBAC::isSuperAdmin()): ?>
+        <a href="<?php echo url('admin/organisations.php'); ?>"
+           class="<?php echo $currentPage === 'organisations.php' ? 'active' : ''; ?>">
+            <i class="fa-solid fa-building"></i>
+            <span>Organisations</span>
+        </a>
+        <?php endif; ?>
         <?php if ($isAdmin): ?>
         <a href="<?php echo url('admin/settings.php'); ?>"
            class="<?php echo $currentDir === 'admin' ? 'active' : ''; ?>">
