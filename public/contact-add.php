@@ -51,7 +51,7 @@ include INCLUDES_PATH . '/header.php';
 <?php endforeach; ?>
 
 <form method="POST" action="">
-    <?php echo CSRF::getTokenField(CSRF_TOKEN_NAME); ?>
+    <?php echo CSRF::tokenField(); ?>
     <div class="card" style="max-width:580px">
         <div class="form-group">
             <label for="contact_type">Type <span style="color:var(--danger)">*</span></label>

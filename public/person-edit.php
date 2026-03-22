@@ -53,7 +53,7 @@ include INCLUDES_PATH . '/header.php';
 <?php endforeach; ?>
 
 <form method="POST" action="">
-    <?php echo CSRF::getTokenField(CSRF_TOKEN_NAME); ?>
+    <?php echo CSRF::tokenField(); ?>
 
     <div class="card">
         <div class="section-header" style="margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)">

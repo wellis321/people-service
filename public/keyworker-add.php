@@ -69,7 +69,7 @@ include INCLUDES_PATH . '/header.php';
 <?php endforeach; ?>
 
 <form method="POST" action="">
-    <?php echo CSRF::getTokenField(CSRF_TOKEN_NAME); ?>
+    <?php echo CSRF::tokenField(); ?>
     <div class="card" style="max-width:580px">
 
         <?php if (is_array($staffList) && !empty($staffList)): ?>

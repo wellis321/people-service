@@ -251,7 +251,7 @@ include INCLUDES_PATH . '/header.php';
                                 <td><?php echo $c['is_primary'] ? '<i class="fa-solid fa-star" style="color:var(--warning)"></i>' : ''; ?></td>
                                 <td>
                                     <form method="POST" action="" style="display:inline" onsubmit="return confirm('Remove this contact?')">
-                                        <?php echo CSRF::getTokenField(CSRF_TOKEN_NAME); ?>
+                                        <?php echo CSRF::tokenField(); ?>
                                         <input type="hidden" name="action" value="delete_contact">
                                         <input type="hidden" name="contact_id" value="<?php echo $c['id']; ?>">
                                         <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
@@ -297,7 +297,7 @@ include INCLUDES_PATH . '/header.php';
                                 <td>
                                     <a href="<?php echo url('care-need-edit.php?id=' . $n['id'] . '&person_id=' . $personId); ?>" class="btn btn-secondary btn-sm">Edit</a>
                                     <form method="POST" action="" style="display:inline" onsubmit="return confirm('Delete this care need?')">
-                                        <?php echo CSRF::getTokenField(CSRF_TOKEN_NAME); ?>
+                                        <?php echo CSRF::tokenField(); ?>
                                         <input type="hidden" name="action" value="delete_care_need">
                                         <input type="hidden" name="need_id" value="<?php echo $n['id']; ?>">
                                         <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
@@ -348,14 +348,14 @@ include INCLUDES_PATH . '/header.php';
                                 <td>
                                     <?php if (!$kw['ended_at']): ?>
                                     <form method="POST" action="" style="display:inline" onsubmit="return confirm('End this key worker assignment today?')">
-                                        <?php echo CSRF::getTokenField(CSRF_TOKEN_NAME); ?>
+                                        <?php echo CSRF::tokenField(); ?>
                                         <input type="hidden" name="action" value="end_keyworker">
                                         <input type="hidden" name="kw_id" value="<?php echo $kw['id']; ?>">
                                         <button type="submit" class="btn btn-secondary btn-sm">End</button>
                                     </form>
                                     <?php endif; ?>
                                     <form method="POST" action="" style="display:inline" onsubmit="return confirm('Delete this record?')">
-                                        <?php echo CSRF::getTokenField(CSRF_TOKEN_NAME); ?>
+                                        <?php echo CSRF::tokenField(); ?>
                                         <input type="hidden" name="action" value="delete_keyworker">
                                         <input type="hidden" name="kw_id" value="<?php echo $kw['id']; ?>">
                                         <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>

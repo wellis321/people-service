@@ -101,7 +101,7 @@ include INCLUDES_PATH . '/header.php';
                     <td>
                         <?php if ($k['is_active']): ?>
                         <form method="POST" action="" style="display:inline" onsubmit="return confirm('Revoke this API key?')">
-                            <?php echo CSRF::getTokenField(CSRF_TOKEN_NAME); ?>
+                            <?php echo CSRF::tokenField(); ?>
                             <input type="hidden" name="action"  value="revoke_api_key">
                             <input type="hidden" name="key_id" value="<?php echo $k['id']; ?>">
                             <button type="submit" class="btn btn-danger btn-sm">Revoke</button>
@@ -118,7 +118,7 @@ include INCLUDES_PATH . '/header.php';
     <hr style="margin:1.5rem 0;border-color:var(--border)">
     <h3 style="font-size:.9rem;font-weight:600;margin-bottom:1rem">Create New API Key</h3>
     <form method="POST" action="" style="display:flex;gap:0.75rem;align-items:flex-end;flex-wrap:wrap">
-        <?php echo CSRF::getTokenField(CSRF_TOKEN_NAME); ?>
+        <?php echo CSRF::tokenField(); ?>
         <input type="hidden" name="action" value="create_api_key">
         <div class="form-group" style="margin-bottom:0;flex:1;min-width:200px">
             <label for="key_name">Key name</label>
