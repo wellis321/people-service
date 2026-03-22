@@ -17,7 +17,7 @@ if (!$person) {
 
 // Load staff list from PMS if connected
 ob_start();
-$staffList = StaffServiceClient::enabled() ? StaffServiceClient::getStaffList($organisationId) : null;
+$staffList = StaffServiceClient::enabled($organisationId) ? StaffServiceClient::getStaffList($organisationId) : null;
 ob_end_clean();
 
 $errors = [];

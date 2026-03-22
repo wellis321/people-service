@@ -2,83 +2,85 @@
 /**
  * StaffServiceClient — HTTP client for querying the PMS (Staff Service) API.
  *
- * Used to look up staff names when assigning key workers, and to push
- * display-name refreshes when a person's details change.
+ * Connection settings are read per-organisation from `organisation_settings`,
+ * falling back to .env values:
+ *   STAFF_SERVICE_URL=http://localhost:8000
+ *   STAFF_SERVICE_API_KEY=<key from PMS Admin → API Keys>
  */
 class StaffServiceClient
 {
-    private static function baseUrl(): string
+    // ── Per-org config ────────────────────────────────────────────────────────
+
+    private static function baseUrl(int $orgId): string
     {
-        return rtrim(getenv('STAFF_SERVICE_URL') ?: '', '/');
+        return rtrim(
+            OrgSettings::get($orgId, 'staff_service_url', getenv('STAFF_SERVICE_URL') ?: ''),
+            '/'
+        );
     }
 
-    private static function apiKey(): string
+    private static function apiKey(int $orgId): string
     {
-        return getenv('STAFF_SERVICE_API_KEY') ?: '';
+        return OrgSettings::get($orgId, 'staff_service_api_key', getenv('STAFF_SERVICE_API_KEY') ?: '');
     }
 
-    public static function enabled(): bool
+    public static function enabled(int $orgId): bool
     {
-        return self::baseUrl() !== '' && self::apiKey() !== '';
+        return self::baseUrl($orgId) !== '' && self::apiKey($orgId) !== '';
     }
 
     // ── API calls ─────────────────────────────────────────────────────────────
 
     /**
      * Fetch the list of active staff for an organisation.
-     * Returns array of ['id', 'first_name', 'last_name', 'job_title', ...] or null on error.
      */
     public static function getStaffList(int $orgId): ?array
     {
-        $data = self::get('/api/staff-data.php?organisation_id=' . $orgId . '&status=active&format=list');
+        $data = self::get($orgId, '/api/staff-data.php?organisation_id=' . $orgId . '&status=active&format=list');
         return is_array($data) ? $data : null;
     }
 
     /**
      * Fetch a single staff member's basic details.
      */
-    public static function getStaff(int $staffId): ?array
+    public static function getStaff(int $orgId, int $staffId): ?array
     {
-        $data = self::get('/api/staff-data.php?id=' . $staffId);
+        $data = self::get($orgId, '/api/staff-data.php?id=' . $staffId);
         return is_array($data) && isset($data['id']) ? $data : null;
     }
 
-    // ── HTTP helpers ──────────────────────────────────────────────────────────
-
-    private static function get(string $path): mixed
+    /**
+     * Test a connection using explicit credentials (used by settings page).
+     */
+    public static function testConnection(string $url, string $apiKey): bool
     {
-        if (!self::enabled()) return null;
-
-        $url = self::baseUrl() . $path;
+        $url = rtrim($url, '/') . '/api/staff-data.php?format=list&limit=1';
         $ctx = stream_context_create([
             'http' => [
-                'method'  => 'GET',
-                'header'  => 'X-API-Key: ' . self::apiKey() . "\r\n" .
-                             'Accept: application/json' . "\r\n",
-                'timeout' => 5,
+                'method'        => 'GET',
+                'header'        => 'X-API-Key: ' . $apiKey . "\r\n" .
+                                   'Accept: application/json' . "\r\n",
+                'timeout'       => 5,
                 'ignore_errors' => true,
             ],
         ]);
         $body = @file_get_contents($url, false, $ctx);
-        if ($body === false) return null;
-        return json_decode($body, true);
+        return $body !== false && json_decode($body) !== null;
     }
 
-    private static function post(string $path, array $payload): mixed
-    {
-        if (!self::enabled()) return null;
+    // ── HTTP helpers ──────────────────────────────────────────────────────────
 
-        $url  = self::baseUrl() . $path;
-        $json = json_encode($payload);
-        $ctx  = stream_context_create([
+    private static function get(int $orgId, string $path): mixed
+    {
+        if (!self::enabled($orgId)) return null;
+
+        $url = self::baseUrl($orgId) . $path;
+        $ctx = stream_context_create([
             'http' => [
-                'method'  => 'POST',
-                'header'  => 'X-API-Key: ' . self::apiKey() . "\r\n" .
-                             'Content-Type: application/json' . "\r\n" .
-                             'Content-Length: ' . strlen($json) . "\r\n" .
-                             'Accept: application/json' . "\r\n",
-                'content' => $json,
-                'timeout' => 5,
+                'method'        => 'GET',
+                'header'        => 'X-API-Key: ' . self::apiKey($orgId) . "\r\n" .
+                                   'Accept: application/json' . "\r\n",
+                'timeout'       => 5,
                 'ignore_errors' => true,
             ],
         ]);
