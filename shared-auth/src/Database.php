@@ -8,7 +8,7 @@
  * Get database connection
  * @return PDO
  */
-function getDbConnection() {
+if (!function_exists('getDbConnection')) { function getDbConnection() {
     static $pdo = null;
     
     if ($pdo === null) {
@@ -28,5 +28,4 @@ function getDbConnection() {
     }
     
     return $pdo;
-}
-
+} }
