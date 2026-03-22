@@ -1,0 +1,7 @@
+.env
+vendor/
+scripts/
+public/setup.php
+uploads/
+*.log
+.DS_Store
