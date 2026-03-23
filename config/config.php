@@ -36,8 +36,10 @@ define('APP_URL',       rtrim(getenv('APP_URL') ?: 'http://localhost:8002', '/')
 define('CONTACT_EMAIL',   getenv('CONTACT_EMAIL')   ?: 'admin@example.com');
 
 // Cross-service URLs (set in .env for each environment)
-define('STAFF_SERVICE_URL', rtrim(getenv('STAFF_SERVICE_URL') ?: '', '/'));
-define('TEAM_SERVICE_URL',  rtrim(getenv('TEAM_SERVICE_URL')  ?: '', '/'));
+define('STAFF_SERVICE_URL',  rtrim(getenv('STAFF_SERVICE_URL') ?: '', '/'));
+define('TEAM_SERVICE_URL',   rtrim(getenv('TEAM_SERVICE_URL')  ?: '', '/'));
+// Shared secret for cross-service org provisioning
+define('PROVISION_SECRET',   getenv('PROVISION_SECRET')        ?: '');
 
 // CSRF token name — must match shared-auth expectation
 define('CSRF_TOKEN_NAME', 'csrf_token');
