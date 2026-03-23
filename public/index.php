@@ -2,7 +2,7 @@
 require_once dirname(__DIR__) . '/config/config.php';
 
 if (!Auth::isLoggedIn()) {
-    header('Location: ' . url('login.php'));
+    header('Location: ' . url('landing.php'));
     exit;
 }
 
