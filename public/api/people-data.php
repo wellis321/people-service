@@ -12,9 +12,10 @@ require_once dirname(__DIR__, 2) . '/config/config.php';
 header('Content-Type: application/json; charset=utf-8');
 
 $auth = ApiAuth::requireAuth();
-$orgId = (int) ($auth['organisation_id'] ?? 0);
+// App-scoped keys (organisation_id = null) must supply organisation_id as a query param
+$orgId = (int) ($auth['organisation_id'] ?? $_GET['organisation_id'] ?? 0);
 if (!$orgId) {
-    ApiAuth::json(['error' => 'Organisation context required'], 400);
+    ApiAuth::json(['error' => 'Organisation context required — pass organisation_id as a query parameter'], 400);
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
