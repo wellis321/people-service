@@ -157,12 +157,12 @@ include INCLUDES_PATH . '/header.php';
             </div>
         </div>
         <div class="card" style="padding:0.75rem">
-            <nav class="sidebar-nav">
+            <div class="sidebar-nav">
                 <a href="#section-details" class="active"><i class="fa-solid fa-id-card"></i> Details</a>
                 <a href="#section-contacts"><i class="fa-solid fa-address-book"></i> Contacts</a>
                 <a href="#section-care-needs"><i class="fa-solid fa-hand-holding-medical"></i> Care Needs</a>
                 <a href="#section-keyworkers"><i class="fa-solid fa-user-tie"></i> Key Workers</a>
-            </nav>
+            </div>
         </div>
     </div>
 
